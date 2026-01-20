@@ -1,0 +1,124 @@
+1) Program Table:
+
+INSERT INTO Program (ProgramID, ProgramName) VALUES (201, 'Computer Eng');
+INSERT INTO Program (ProgramID, ProgramName) VALUES (202, 'Information Tech');
+INSERT INTO Program (ProgramID, ProgramName) VALUES (203, 'BBA');
+INSERT INTO Program (ProgramID, ProgramName) VALUES (204, 'Cyber Security');
+INSERT INTO Program (ProgramID, ProgramName) VALUES (205, 'MultiMedia');
+INSERT INTO Program (ProgramID, ProgramName) VALUES (206, 'Maths');
+INSERT INTO Program (ProgramID, ProgramName) VALUES (207, 'BSC Computing');
+
+2) Student Table:
+
+INSERT INTO Student (StudentID, StudentName, ProgramID) VALUES (1, 'Prabhat', 201);
+INSERT INTO Student (StudentID, StudentName, ProgramID) VALUES (2, 'Grish', 202);
+INSERT INTO Student (StudentID, StudentName, ProgramID) VALUES (3, 'Susil', 203);
+INSERT INTO Student (StudentID, StudentName, ProgramID) VALUES (4, 'Baruna', 204);
+INSERT INTO Student (StudentID, StudentName, ProgramID) VALUES (5, 'Puja', 205);
+INSERT INTO Student (StudentID, StudentName, ProgramID) VALUES (6, 'Karuna', 206);
+INSERT INTO Student (StudentID, StudentName, ProgramID) VALUES (7, 'Rocky', 207);
+INSERT INTO Student (StudentID, StudentName, ProgramID) VALUES (8, 'Raman', 202);
+
+3) Module Table: 
+
+INSERT INTO Module (ModuleID, ModuleName) VALUES (301, 'Databases');
+INSERT INTO Module (ModuleID, ModuleName) VALUES (302, 'Frontend');
+INSERT INTO Module (ModuleID, ModuleName) VALUES (303, 'Data Sci');
+INSERT INTO Module (ModuleID, ModuleName) VALUES (304, 'Backend');
+INSERT INTO Module (ModuleID, ModuleName) VALUES (305, 'Flutter');
+INSERT INTO Module (ModuleID, ModuleName) VALUES (306, 'Ful Stack');
+INSERT INTO Module (ModuleID, ModuleName) VALUES (307, 'Danjo');
+
+4) Student_Module Table:
+
+INSERT INTO Student_Module (StudentID, ModuleID) VALUES (1, 301);
+INSERT INTO Student_Module (StudentID, ModuleID) VALUES (2, 302);
+INSERT INTO Student_Module (StudentID, ModuleID) VALUES (3, 303);
+INSERT INTO Student_Module (StudentID, ModuleID) VALUES (4, 304);
+INSERT INTO Student_Module (StudentID, ModuleID) VALUES (5, 305);
+INSERT INTO Student_Module (StudentID, ModuleID) VALUES (6, 306);
+INSERT INTO Student_Module (StudentID, ModuleID) VALUES (7, 307);
+INSERT INTO Student_Module (StudentID, ModuleID) VALUES (8, 302);
+
+5) Resources Table:
+
+INSERT INTO Resources (ResourceID, Title, Type, Duration, Sequence) VALUES (401, 'Intro', 'Video', 120, 1);
+INSERT INTO Resources (ResourceID, Title, Type, Duration, Sequence) VALUES (402, 'Basic', 'PDF', 10, 2);
+INSERT INTO Resources (ResourceID, Title, Type, Duration, Sequence) VALUES (403, 'Hacking', 'Video', 150, 3);
+INSERT INTO Resources (ResourceID, Title, Type, Duration, Sequence) VALUES (404, 'Quize', 'PDF', 20, 4);
+INSERT INTO Resources (ResourceID, Title, Type, Duration, Sequence) VALUES (405, 'Javw', 'Video', 180, 5);
+INSERT INTO Resources (ResourceID, Title, Type, Duration, Sequence) VALUES (406, 'Linux', 'PDF', 15, 6);
+INSERT INTO Resources (ResourceID, Title, Type, Duration, Sequence) VALUES (407, 'React', 'Video', 100, 7);
+
+6) Resources_Module_Student Table:
+
+INSERT INTO Resources_Module_Student (ResourceID, ModuleID, StudentID) VALUES (401, 301, 1);
+INSERT INTO Resources_Module_Student (ResourceID, ModuleID, StudentID) VALUES (402, 302, 2);
+INSERT INTO Resources_Module_Student (ResourceID, ModuleID, StudentID) VALUES (403, 303, 3);
+INSERT INTO Resources_Module_Student (ResourceID, ModuleID, StudentID) VALUES (404, 304, 4);
+INSERT INTO Resources_Module_Student (ResourceID, ModuleID, StudentID) VALUES (405, 305, 5);
+INSERT INTO Resources_Module_Student (ResourceID, ModuleID, StudentID) VALUES (406, 306, 6);
+INSERT INTO Resources_Module_Student (ResourceID, ModuleID, StudentID) VALUES (407, 307, 7);
+
+7) Assessment Table:
+
+INSERT INTO Assessment (AssessmentID, AssessmentTitle, Deadline, Weightage, TotalMarks) VALUES (501, 'Final Term', 30, 50, 100);
+INSERT INTO Assessment (AssessmentID, AssessmentTitle, Deadline, Weightage, TotalMarks) VALUES (502, 'Project Sub', 60, 70, 100);
+INSERT INTO Assessment (AssessmentID, AssessmentTitle, Deadline, Weightage, TotalMarks) VALUES (503, 'Coursework', 20, 30, 50);
+INSERT INTO Assessment (AssessmentID, AssessmentTitle, Deadline, Weightage, TotalMarks) VALUES (504, 'Disscuss class', 10, 10, 20);
+INSERT INTO Assessment (AssessmentID, AssessmentTitle, Deadline, Weightage, TotalMarks) VALUES (505, 'Extra class', 15, 15, 20);
+INSERT INTO Assessment (AssessmentID, AssessmentTitle, Deadline, Weightage, TotalMarks) VALUES (506, 'Individual', 25, 40, 50);
+INSERT INTO Assessment (AssessmentID, AssessmentTitle, Deadline, Weightage, TotalMarks) VALUES (507, 'Group Task', 90, 100, 100);
+
+8) Teacher Table: 
+
+INSERT INTO Teacher (TeacherID, TeacherName, TeacherEmail) VALUES (601, 'Ramesh', 'Ramesh@is.edu.np');
+INSERT INTO Teacher (TeacherID, TeacherName, TeacherEmail) VALUES (602, 'Dipesh', 'Dipesh@Is.edu.np');
+INSERT INTO Teacher (TeacherID, TeacherName, TeacherEmail) VALUES (603, 'Ashok', 'Ashok@Is.edu.np');
+INSERT INTO Teacher (TeacherID, TeacherName, TeacherEmail) VALUES (604, 'Adesh', 'Adesh@Is.edu.np');
+INSERT INTO Teacher (TeacherID, TeacherName, TeacherEmail) VALUES (605, 'Rakesh', 'Rakesh@Is.edu.np');
+INSERT INTO Teacher (TeacherID, TeacherName, TeacherEmail) VALUES (606, 'Bishnu', 'Bishnu@Is.edu.np');
+INSERT INTO Teacher (TeacherID, TeacherName, TeacherEmail) VALUES (607, 'Kamal', 'Kamal@Is.edu.np');
+
+9) Announcement Table: 
+
+INSERT INTO Announcement (AnnouncementID, AnnouncementTitle, AnnouncementDate) VALUES (701, 'First term', TO_DATE('2024-03-01', 'YYYY-MM-DD'));
+INSERT INTO Announcement (AnnouncementID, AnnouncementTitle, AnnouncementDate) VALUES (702, 'Deadline', TO_DATE('2024-05-05', 'YYYY-MM-DD'));
+INSERT INTO Announcement (AnnouncementID, AnnouncementTitle, AnnouncementDate) VALUES (703, 'Lab notice', TO_DATE('2024-02-10', 'YYYY-MM-DD'));
+INSERT INTO Announcement (AnnouncementID, AnnouncementTitle, AnnouncementDate) VALUES (704, 'Task Guidelines', TO_DATE('2024-05-15', 'YYYY-MM-DD'));
+INSERT INTO Announcement (AnnouncementID, AnnouncementTitle, AnnouncementDate) VALUES (705, 'Vacation', TO_DATE('2024-01-20', 'YYYY-MM-DD'));
+INSERT INTO Announcement (AnnouncementID, AnnouncementTitle, AnnouncementDate) VALUES (706, 'Semester Start', TO_DATE('2024-05-25', 'YYYY-MM-DD'));
+INSERT INTO Announcement (AnnouncementID, AnnouncementTitle, AnnouncementDate) VALUES (707, 'Semester End', TO_DATE('2024-04-28', 'YYYY-MM-DD'));
+
+ 10) Assessment_Module_Student Table: 
+
+INSERT INTO Assessment_Module_Student (AssessmentID, ModuleID, StudentID) VALUES (501, 301, 1);
+INSERT INTO Assessment_Module_Student (AssessmentID, ModuleID, StudentID) VALUES (502, 302, 2);
+INSERT INTO Assessment_Module_Student (AssessmentID, ModuleID, StudentID) VALUES (503, 303, 3);
+INSERT INTO Assessment_Module_Student (AssessmentID, ModuleID, StudentID) VALUES (504, 304, 4);
+INSERT INTO Assessment_Module_Student (AssessmentID, ModuleID, StudentID) VALUES (505, 305, 5);
+INSERT INTO Assessment_Module_Student (AssessmentID, ModuleID, StudentID) VALUES (506, 306, 6);
+INSERT INTO Assessment_Module_Student (AssessmentID, ModuleID, StudentID) VALUES (507, 307, 7);
+
+11) Teacher_Student_Module Table:
+
+INSERT INTO Teacher_Student_Module (TeacherID, StudentID, ModuleID) VALUES (601, 1, 301);  
+INSERT INTO Teacher_Student_Module (TeacherID, StudentID, ModuleID) VALUES (601, 2, 302);  
+INSERT INTO Teacher_Student_Module (TeacherID, StudentID, ModuleID) VALUES (602, 3, 302); 
+INSERT INTO Teacher_Student_Module (TeacherID, StudentID, ModuleID) VALUES (603, 4, 303); 
+INSERT INTO Teacher_Student_Module (TeacherID, StudentID, ModuleID) VALUES (603, 5, 304); 
+INSERT INTO Teacher_Student_Module (TeacherID, StudentID, ModuleID) VALUES (604, 6, 305);  
+INSERT INTO Teacher_Student_Module (TeacherID, StudentID, ModuleID) VALUES (605, 7, 306);  
+
+
+12) Stude_Modu_Teach_Announce Table: 
+
+INSERT INTO Stude_Modu_Teach_Announce (StudentID, ModuleID, TeacherID, AnnouncementID) VALUES (1, 301, 601, 701);
+INSERT INTO Stude_Modu_Teach_Announce (StudentID, ModuleID, TeacherID, AnnouncementID) VALUES (2, 302, 602, 702);
+INSERT INTO Stude_Modu_Teach_Announce (StudentID, ModuleID, TeacherID, AnnouncementID) VALUES (3, 303, 603, 703);
+INSERT INTO Stude_Modu_Teach_Announce (StudentID, ModuleID, TeacherID, AnnouncementID) VALUES (4, 304, 604, 704);
+INSERT INTO Stude_Modu_Teach_Announce (StudentID, ModuleID, TeacherID, AnnouncementID) VALUES (5, 305, 605, 705);
+INSERT INTO Stude_Modu_Teach_Announce (StudentID, ModuleID, TeacherID, AnnouncementID) VALUES (6, 306, 606, 706);
+INSERT INTO Stude_Modu_Teach_Announce (StudentID, ModuleID, TeacherID, AnnouncementID) VALUES (7, 307, 607, 707);
+
+
