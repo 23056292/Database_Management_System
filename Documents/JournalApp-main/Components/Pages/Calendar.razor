@@ -1,0 +1,193 @@
+@page "/calendar"
+@using System.Globalization
+
+<div class="container py-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>📓 Calendar</h2>
+        <div>
+            <button class="btn btn-outline-secondary me-2" @onclick="ToggleTheme">Theme</button>
+            <button class="btn btn-outline-secondary" @onclick="ToggleView">Filter</button>
+        </div>
+    </div>
+
+    <!-- Month Navigation -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <button class="btn btn-primary" @onclick="() => ChangeMonth(-1)">&lt;</button>
+        <h4 class="mb-0">@CurrentMonthName @CurrentYear</h4>
+        <button class="btn btn-primary" @onclick="() => ChangeMonth(1)">&gt;</button>
+    </div>
+
+    <!-- Week Days -->
+    <div class="d-flex border-bottom fw-bold text-center">
+        @foreach (var day in WeekDays)
+        {
+            <div class="flex-fill py-2">@day</div>
+        }
+    </div>
+
+    <!-- Calendar Grid -->
+    <div class="row g-0 text-center">
+        @foreach (var day in CalendarDays)
+        {
+            <div class="col border calendar-cell @(GetCellClass(day))" @onclick="() => SelectDay(day)" style="min-height:90px;">
+                @if (day.Day != 0)
+                {
+                    <div class="d-flex justify-content-between px-1">
+                        <span>@day.Day</span>
+                        @if (day.Streak)
+                        {
+                            <span class="text-danger">🔥</span>
+                        }
+                    </div>
+                    @if (day.HasEntry)
+                    {
+                        <div class="mt-2">
+                            <span class="badge bg-success">@day.Mood</span>
+                            <small class="text-muted">(@day.EntriesCount)</small>
+                        </div>
+                    }
+                }
+            </div>
+        }
+    </div>
+
+    <!-- Selected Day Details -->
+    @if (SelectedDay != null)
+    {
+        <div class="card mt-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5>@SelectedDayDateFormatted</h5>
+                <button class="btn-close" @onclick="CloseDayDetails"></button>
+            </div>
+            <div class="card-body">
+                @if (SelectedDay.Details != null && SelectedDay.Details.Count > 0)
+                {
+                    @foreach (var entry in SelectedDay.Details)
+                    {
+                        <div class="mb-2">
+                            <span class="badge bg-info me-2">@entry.Mood</span>
+                            <strong>@entry.Time:</strong> @entry.Preview
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p class="text-muted">No entries for this day.</p>
+                }
+                <button class="btn btn-success mt-2" @onclick="AddEntryToDay">Add Entry</button>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private int CurrentMonth = DateTime.Now.Month - 1;
+    private int CurrentYear = DateTime.Now.Year;
+    private bool IsDarkMode = false;
+
+    private List<string> WeekDays = new() { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
+    private List<CalendarDay> CalendarDays = new();
+    private CalendarDay? SelectedDay;
+    private string SelectedDayDateFormatted = "";
+
+    private string CurrentMonthName => CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(CurrentMonth + 1);
+
+    // Sample journal data
+    private Dictionary<string, JournalEntryData> journalData = new()
+    {
+        { "2024-04-01", new JournalEntryData{ Mood="😊", EntriesCount=1, Streak=true } },
+        { "2024-04-15", new JournalEntryData{ Mood="😐", EntriesCount=2, Streak=true, Details=new List<JournalDetail>{ new JournalDetail{ Time="3:45 PM", Mood="😊", Preview="Completed project..." } } } }
+    };
+
+    protected override void OnInitialized() => GenerateCalendar();
+
+    private void ChangeMonth(int direction)
+    {
+        CurrentMonth += direction;
+        if (CurrentMonth > 11) { CurrentMonth = 0; CurrentYear++; }
+        if (CurrentMonth < 0) { CurrentMonth = 11; CurrentYear--; }
+        GenerateCalendar();
+    }
+
+    private void ToggleTheme() => IsDarkMode = !IsDarkMode;
+    private void ToggleView() { }
+
+    private void SelectDay(CalendarDay day)
+    {
+        if (day.Day == 0) return;
+        SelectedDay = day;
+        SelectedDayDateFormatted = new DateTime(CurrentYear, CurrentMonth + 1, day.Day).ToString("D");
+    }
+
+    private void CloseDayDetails() => SelectedDay = null;
+    private void AddEntryToDay() { }
+
+    private void GenerateCalendar()
+    {
+        CalendarDays.Clear();
+        var firstDay = new DateTime(CurrentYear, CurrentMonth + 1, 1);
+        var daysInMonth = DateTime.DaysInMonth(CurrentYear, CurrentMonth + 1);
+        int firstDayIndex = (int)firstDay.DayOfWeek;
+
+        // Empty cells
+        for (int i = 0; i < firstDayIndex; i++)
+            CalendarDays.Add(new CalendarDay { Day = 0 });
+
+        // Add real days
+        for (int day = 1; day <= daysInMonth; day++)
+        {
+            var dateStr = $"{CurrentYear}-{(CurrentMonth + 1):D2}-{day:D2}";
+            journalData.TryGetValue(dateStr, out var data);
+
+            CalendarDays.Add(new CalendarDay
+            {
+                Day = day,
+                HasEntry = data != null,
+                Mood = data?.Mood ?? "",
+                EntriesCount = data?.EntriesCount ?? 0,
+                Streak = data?.Streak ?? false,
+                Details = data?.Details
+            });
+        }
+
+        // Fill to complete weeks
+        while (CalendarDays.Count % 7 != 0)
+            CalendarDays.Add(new CalendarDay { Day = 0 });
+    }
+
+    private string GetCellClass(CalendarDay day)
+    {
+        if (day.Day == 0) return "bg-light";
+        var today = DateTime.Today;
+        var date = new DateTime(CurrentYear, CurrentMonth + 1, day.Day);
+        if (date == today) return "bg-primary text-white";
+        if (date < today) return "bg-white";
+        return "bg-light";
+    }
+
+    class CalendarDay
+    {
+        public int Day { get; set; }
+        public bool HasEntry { get; set; }
+        public string Mood { get; set; } = "";
+        public int EntriesCount { get; set; }
+        public bool Streak { get; set; }
+        public List<JournalDetail>? Details { get; set; }
+    }
+
+    class JournalEntryData
+    {
+        public string Mood { get; set; } = "";
+        public int EntriesCount { get; set; }
+        public bool Streak { get; set; }
+        public List<JournalDetail>? Details { get; set; }
+    }
+
+    class JournalDetail
+    {
+        public string Time { get; set; } = "";
+        public string Mood { get; set; } = "";
+        public string Preview { get; set; } = "";
+    }
+}

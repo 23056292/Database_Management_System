@@ -1,0 +1,150 @@
+@page "/profile"
+@using JournalApp.Models
+@using JournalApp.Services
+@inject IAuthService AuthService
+@inject StateContainer State
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <h3>User Profile</h3>
+                </div>
+                <div class="card-body">
+                    @if (loading)
+                    {
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    }
+                    else if (userProfile != null)
+                    {
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">ID</label>
+                                    <p class="form-control-plaintext">@userProfile.Id</p>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Username</label>
+                                    <input type="text" class="form-control" @bind="userProfile.Username" />
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Email</label>
+                                    <input type="email" class="form-control" @bind="userProfile.Email" />
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Member Since</label>
+                                    <p class="form-control-plaintext">@userProfile.CreatedAt.ToString("MMM dd, yyyy")</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <button class="btn btn-primary me-2" @onclick="UpdateProfile" disabled="@isUpdating">
+                                @if (isUpdating)
+                                {
+                                    <span>Updating...</span>
+                                }
+                                else
+                                {
+                                    <span>Update Profile</span>
+                                }
+                            </button>
+                            
+                            <button class="btn btn-secondary" @onclick="Logout">Logout</button>
+                        </div>
+                        
+                        @if (!string.IsNullOrEmpty(message))
+                        {
+                            <div class="alert @(isSuccess ? "alert-success" : "alert-danger") mt-3" role="alert">
+                                @message
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning" role="alert">
+                            User profile not found. Please log in again.
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private UserProfileDto userProfile;
+    private bool loading = true;
+    private bool isUpdating = false;
+    private string message = "";
+    private bool isSuccess = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadUserProfile();
+    }
+
+    private async Task LoadUserProfile()
+    {
+        loading = true;
+        
+        // Get user from state container
+        userProfile = State.CurrentUser;
+        
+        loading = false;
+    }
+
+    private async Task UpdateProfile()
+    {
+        if (userProfile == null) return;
+        
+        isUpdating = true;
+        message = "";
+        
+        var result = await AuthService.UpdateUserProfileAsync(userProfile.Id, userProfile);
+        
+        if (result)
+        {
+            isSuccess = true;
+            message = "Profile updated successfully!";
+            
+            // Update state container
+            State.SetCurrentUser(userProfile);
+        }
+        else
+        {
+            isSuccess = false;
+            message = "Failed to update profile.";
+        }
+        
+        isUpdating = false;
+    }
+
+    private async Task Logout()
+    {
+        // Show confirmation dialog
+        if (await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to logout?"))
+        {
+            var result = await AuthService.LogoutAsync();
+            
+            if (result)
+            {
+                State.ClearCurrentUser();
+                Navigation.NavigateTo("/login");
+            }
+        }
+    }
+}
