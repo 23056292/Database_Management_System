@@ -349,6 +349,7 @@
 /Users/prabhatlc/Documents/JournalApp-main/obj/Debug/net8.0-maccatalyst/maccatalyst-arm64/JournalApp.pdb
 /Users/prabhatlc/Documents/JournalApp-main/obj/Debug/net8.0-maccatalyst/maccatalyst-arm64/JournalApp.genruntimeconfig.cache
 /Users/prabhatlc/Documents/JournalApp-main/obj/Debug/net8.0-maccatalyst/maccatalyst-arm64/ref/JournalApp.dll
+/Users/prabhatlc/Documents/JournalApp-main/obj/Debug/net8.0-maccatalyst/maccatalyst-arm64/JournalApp.sourcelink.json
 /Users/prabhatlc/Documents/JournalApp-main/obj/Debug/net8.0-maccatalyst/maccatalyst-arm64/resourcestamps/Microsoft.AspNetCore.Authorization.stamp
 /Users/prabhatlc/Documents/JournalApp-main/obj/Debug/net8.0-maccatalyst/maccatalyst-arm64/resourcestamps/Microsoft.AspNetCore.Components.stamp
 /Users/prabhatlc/Documents/JournalApp-main/obj/Debug/net8.0-maccatalyst/maccatalyst-arm64/resourcestamps/Microsoft.AspNetCore.Components.Forms.stamp
