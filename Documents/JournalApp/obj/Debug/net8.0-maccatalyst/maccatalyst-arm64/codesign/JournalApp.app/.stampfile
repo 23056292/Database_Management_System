@@ -1,1 +1,0 @@
--v --force --timestamp=none --sign - --entitlements /Users/prabhatlc/Documents/JournalApp-main/obj/Debug/net8.0-maccatalyst/maccatalyst-arm64/Entitlements.xcent /Users/prabhatlc/Documents/JournalApp-main/bin/Debug/net8.0-maccatalyst/maccatalyst-arm64/JournalApp.app
