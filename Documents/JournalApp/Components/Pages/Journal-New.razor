@@ -1,0 +1,155 @@
+@page "/journal/new"
+@inject NavigationManager Nav
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <h2 class="text-center mb-4">New Journal Entry</h2>
+
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+
+                    <EditForm Model="@entry" OnValidSubmit="SaveEntry">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary class="text-danger mb-3" />
+
+                        <!-- Date -->
+                        <div class="mb-3">
+                            <label class="form-label">Entry Date</label>
+                            <InputDate class="form-control"
+                                       @bind-Value="entry.EntryDate" />
+                        </div>
+
+                        <!-- Title -->
+                        <div class="mb-3">
+                            <label class="form-label">Title</label>
+                            <InputText class="form-control"
+                                       @bind-Value="entry.Title"
+                                       placeholder="Entry title" />
+                        </div>
+
+                        <!-- Content -->
+                        <div class="mb-3">
+                            <label class="form-label">Content</label>
+                            <textarea class="form-control"
+                                      rows="6"
+                                      placeholder="Write your journal..."
+                                      @bind="entry.ContentMarkdown"></textarea>
+                        </div>
+
+                        <!-- Primary Mood -->
+                        <div class="mb-3">
+                            <label class="form-label">Primary Mood</label>
+                            <select class="form-select"
+                                    @bind="entry.PrimaryMood">
+                                <option value="">-- Select Mood --</option>
+                                @foreach (var mood in moods)
+                                {
+                                    <option value="@mood">@mood</option>
+                                }
+                            </select>
+                        </div>
+
+                        <!-- Secondary Moods -->
+                        <div class="mb-3">
+                            <label class="form-label">Secondary Moods (Optional)</label>
+                            <select class="form-select"
+                                    multiple
+                                    @onchange="OnSecondaryMoodsChanged">
+                                @foreach (var mood in moods)
+                                {
+                                    <option value="@mood">@mood</option>
+                                }
+                            </select>
+                        </div>
+
+                        <!-- Tags -->
+                        <div class="mb-4">
+                            <label class="form-label">Tags (Optional)</label>
+                            <select class="form-select"
+                                    multiple
+                                    @onchange="OnTagsChanged">
+                                @foreach (var tag in tags)
+                                {
+                                    <option value="@tag">@tag</option>
+                                }
+                            </select>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button class="btn btn-primary me-md-2" type="submit">
+                                Save Entry
+                            </button>
+                            <button class="btn btn-outline-secondary"
+                                    type="button"
+                                    @onclick="Cancel">
+                                Cancel
+                            </button>
+                        </div>
+
+                    </EditForm>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code {
+    private JournalEntryModel entry = new()
+    {
+        EntryDate = DateTime.Today
+    };
+
+    private List<string> moods = new()
+    {
+        "Happy 🙂", "Sad 😔", "Angry 😡", "Relaxed 😌", "Anxious 😟", "Excited 🤩", "Grateful 🙏"
+    };
+
+    private List<string> tags = new()
+    {
+        "Work", "Health", "Fitness", "Reflection", "Self-care", "Hobbies", "Family"
+    };
+
+    private void OnSecondaryMoodsChanged(ChangeEventArgs e)
+    {
+        entry.SecondaryMoods =
+            ((IEnumerable<string>)e.Value!).ToList();
+    }
+
+    private void OnTagsChanged(ChangeEventArgs e)
+    {
+        entry.Tags =
+            ((IEnumerable<string>)e.Value!).ToList();
+    }
+
+    private void SaveEntry()
+    {
+        // TODO: Save to database (PostgreSQL)
+        Nav.NavigateTo("/journal");
+    }
+
+    private void Cancel()
+    {
+        Nav.NavigateTo("/journal");
+    }
+
+    public class JournalEntryModel
+    {
+        public DateTime EntryDate { get; set; } = DateTime.Today;
+
+        public string Title { get; set; } = "";
+
+        public string ContentMarkdown { get; set; } = "";
+
+        public string PrimaryMood { get; set; } = "";
+
+        public List<string> SecondaryMoods { get; set; } = new();
+
+        public List<string> Tags { get; set; } = new();
+    }
+}

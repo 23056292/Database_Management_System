@@ -1,0 +1,93 @@
+@page "/profile"
+@using JournalApp.Models
+@using JournalApp.Services
+@inject IAuthService AuthService
+@inject StateContainer State
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-6">
+            <div class="card shadow-lg border-0 rounded-4">
+
+                <!-- Header -->
+                <div class="card-header bg-primary text-white text-center rounded-top-4">
+                    <h4 class="mb-0">👤 User Profile</h4>
+                </div>
+
+                <!-- Body -->
+                <div class="card-body p-4">
+
+                    @if (loading)
+                    {
+                        <div class="text-center">
+                            <div class="spinner-border text-primary"></div>
+                        </div>
+                    }
+                    else if (userProfile != null)
+                    {
+                        <!-- USER DETAILS -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Username</label>
+                            <input class="form-control" value="@userProfile.Username" disabled />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Email</label>
+                            <input class="form-control" value="@userProfile.Email" disabled />
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Member Since</label>
+                            <input class="form-control"
+                                   value="@userProfile.CreatedAt.ToString("MMMM dd, yyyy")"
+                                   disabled />
+                        </div>
+
+                        <!-- LOGOUT -->
+                        <div class="d-grid">
+                            <button class="btn btn-danger btn-lg" @onclick="Logout">
+                                🚪 Logout
+                            </button>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning text-center">
+                            Session expired. Please login again.
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private UserProfileDto? userProfile;
+    private bool loading = true;
+
+    protected override void OnInitialized()
+    {
+        // Redirect if not logged in
+        if (!State.IsAuthenticated)
+        {
+            Navigation.NavigateTo("/login", true);
+            return;
+        }
+
+        userProfile = State.CurrentUser;
+        loading = false;
+    }
+
+    private async Task Logout()
+    {
+        if (await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to logout?"))
+        {
+            await AuthService.LogoutAsync();
+            State.ClearCurrentUser();
+            Navigation.NavigateTo("/login", true);
+        }
+    }
+}
